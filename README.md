@@ -1,3 +1,3 @@
 # Serverless-backend
 
-This is mono repository of serivices built with Serverless framework
+This is mono repository of services built with Serverless framework
