@@ -1,12 +1,13 @@
 import type { AWS } from '@serverless/typescript';
 
 import hello from '@functions/hello';
+import { swagger, swaggerJson } from '@functions/swagger';
 import {getProductList, getProduct} from '@functions/prodcuts';
 
 const serverlessConfiguration: AWS = {
   service: 'product-service',
   frameworkVersion: '3',
-  plugins: ['serverless-auto-swagger', 'serverless-esbuild', 'serverless-offline'],
+  plugins: ['serverless-esbuild', 'serverless-offline'],
   provider: {
     region: 'eu-west-1',
     name: 'aws',
@@ -21,7 +22,7 @@ const serverlessConfiguration: AWS = {
     },
   },
   // import the function via paths
-  functions: { hello, getProductList, getProduct},
+  functions: { hello, getProductList, getProduct, swagger, swaggerJson},
   package: { individually: true },
   custom: {
     esbuild: {
@@ -35,7 +36,9 @@ const serverlessConfiguration: AWS = {
       concurrency: 10,
     },
     autoswagger: {
-      basePath: '/dev'
+      basePath: '/dev',
+      host: "tmy34d1i92.execute-api.eu-west-1.amazonaws.com",
+      schemes: ['https']
     }
   },
 };
