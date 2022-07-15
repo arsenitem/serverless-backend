@@ -9,4 +9,4 @@
 
 ## Documentation
 
-Swagger ui docmentation can be found here https://f9zi6wbkse.execute-api.eu-west-1.amazonaws.com/swagger
+Swagger ui docmentation can be found here https://tmy34d1i92.execute-api.eu-west-1.amazonaws.com/dev/swagger
