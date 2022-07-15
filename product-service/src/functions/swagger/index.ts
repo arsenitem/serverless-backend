@@ -15,7 +15,7 @@ export const swagger =  {
 export const swaggerJson = {
     handler: `${handlerPath(__dirname)}/swagger-json.main`,
     events: [
-        {
+      {
         http: {
             method: 'get',
             path: 'swagger-json',

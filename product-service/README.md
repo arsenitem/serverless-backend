@@ -5,7 +5,7 @@
 - Run `npm i` to install the project dependencies
 - Run `npm run dev` to run service offline
 - Run `npm run test` to run unit tests
-- Run `npm run deploy` to deploy this stack to AWS
+- Run `npm run deploy` to deploy this to AWS
 
 ## Documentation
 
