@@ -1,0 +1,121 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is product service api ui documentation ",
+        "version": "0.0.1",
+        "title": "Product service"
+    },
+    "host": "tmy34d1i92.execute-api.eu-west-1.amazonaws.com",
+    "basePath": "/dev",
+    "schemes": [
+        "https",
+        "http"
+    ],
+    "tags": [
+        {
+            "name": "products",
+            "description": "Operations with products"
+        }
+    ],
+    "paths": {
+        "/products": {
+            "get": {
+                "tags": [
+                    "products"
+                ],
+                "summary": "Returns list of all prodcuts",
+                "description": "Returns list of all prodcuts",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "productslist": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Product"
+                                    }
+                                }
+                            }      
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
+        "/products/{productId}": {
+            "get": {
+            "tags": [
+                "products"
+            ],
+              "summary": "Returns product by id",
+              "description": "",
+              "produces": [
+                "application/json"
+              ],
+              "parameters": [
+                {
+                  "name": "productId",
+                  "in": "path",
+                  "required": true,
+                  "type": "string"
+                }
+              ],
+              "responses": {
+                "200": {
+                    "description": "successful operation",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "product": { 
+                                "$ref": "#/definitions/Product"
+                            }
+                        }      
+                    }
+                },
+                "400": {
+                    "description": "Not found product"
+                }
+              }
+            }
+        }
+    },
+    "definitions": {
+        "Product": {
+            "type": "object",
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "count": {
+                    "type": "number",
+                    "format": "int64",
+                    "example": 5
+                },
+                "description": {
+                    "type": "string",
+                    "example": "Some product"
+                },
+                "tittle": {
+                    "type": "string",
+                    "example": "Product"
+                },
+                "price": {
+                    "type": "number",
+                    "format": "int64",
+                    "example": 20
+                }
+            }
+        } 
+    }
+}
