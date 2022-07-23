@@ -19,11 +19,11 @@ const serverlessConfiguration: AWS = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
-      PG_HOST: 'lesson4db.coe593cidtwn.eu-west-1.rds.amazonaws.com',
+      PG_HOST: 'host',
       PG_PORT: '5432',
-      PG_DATABASE: 'lesson4',
+      PG_DATABASE: 'databse',
       PG_USERNAME: 'postgres',
-      PG_PASSWORD: '1q2w3e4r',
+      PG_PASSWORD: 'password',
     },
   },
   // import the function via paths
