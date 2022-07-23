@@ -1,22 +1,16 @@
 // import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/api-gateway';
 import { formatJSONError, formatJSONResponse } from '@libs/api-gateway';
 import { middyfy } from '@libs/lambda';
-import { ProductModel } from './model';
-import mock from './mock';
-const getList = async () => {
-  try {
-    const list = await getProducts();
+import Product from '../../models/product.model';
+import { getAllProducts } from '@libs/pg';
+const getList = () => {
+  console.log('getList hanlder was called');
+  return getAllProducts().then((data: Product[]) => {
     return formatJSONResponse({
-      productlist: list
+      product: data
     });
-  } catch (err) {
-    return formatJSONError(err);
-  }
-};
-
-const getProducts = (): Promise<ProductModel[]> => {
-  return new Promise((resolve) => {
-    resolve(mock);
+  }).catch((err) => {
+    return formatJSONError(500, err);
   })
-}
+};
 export const main = middyfy(getList);
