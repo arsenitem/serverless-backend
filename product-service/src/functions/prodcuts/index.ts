@@ -25,3 +25,16 @@ export const getProduct = {
     },
   ],
 };
+
+export const addProduct = {
+  handler: `${handlerPath(__dirname)}/addProduct.main`,
+  events: [
+    {
+      http: {
+        method: 'post',
+        path: 'products',
+        cors: true,
+      },
+    },
+  ],
+};
