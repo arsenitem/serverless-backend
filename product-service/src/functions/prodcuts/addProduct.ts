@@ -5,17 +5,15 @@ import Product from "../../models/product.model";
 import ProductAddSchema from "../../models/validation/product";
 import { addProduct } from "@libs/pg";
 const newProduct = (event) => {
-  console.log("addProduct hanlder was called");
+  console.log("addProduct hanlder was called with parameters ", event.body);
   const { error, value } = ProductAddSchema.validate(event.body);
   if (error) {
     return formatJSONError(400, error);
   }
-  return addProduct(value)
-    .then((product: Product) => {
-      return formatJSONResponse({ product });
-    })
-    .catch((err) => {
-      return formatJSONError(500, err);
-    });
+  return addProduct(value).then((product: Product) => {
+    return formatJSONResponse({ product });
+  }).catch((err) => {
+    return formatJSONError(500, err);
+  });
 };
 export const main = middyfy(newProduct);

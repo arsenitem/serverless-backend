@@ -1,6 +1,6 @@
-import { Client, ClientConfig } from 'pg';
+import { Pool, PoolConfig } from 'pg';
 import Product from 'src/models/product.model';
-const dbOptions: ClientConfig = {
+const dbOptions: PoolConfig = {
     host: process.env.PG_HOST,
     port: Number(process.env.PG_PORT),
     database: process.env.PG_DATABASE,
@@ -12,14 +12,14 @@ const dbOptions: ClientConfig = {
     connectionTimeoutMillis: 6000,
 };
 
-const client = new Client(dbOptions);
+const pool = new Pool(dbOptions);
 
 export const getAllProducts = () : Promise<Array<Product> | string> => {
     return new Promise(async (resolve, reject) => {
-        client.connect()
+        const client = await pool.connect();
         try {
             const res = await client.query('SELECT id, title, description,price, count FROM products p LEFT JOIN stocks s ON p.id = s.product_id;');
-            client.end()
+            await client.release()
             resolve(res.rows);
         } catch(err) {
             console.error(err);
@@ -28,13 +28,14 @@ export const getAllProducts = () : Promise<Array<Product> | string> => {
     }); 
 }
 
-export const getProductById = (id: string) : Promise<Product | string> => {
+export const getProductById = (id: string) : Promise<Product> => {
     return new Promise(async (resolve, reject) => {
-        client.connect()
+        const client = await pool.connect();
         try {
-            const res = await client.query(`SELECT id, title, description,price, count FROM products p LEFT JOIN stocks s ON p.id = s.product_id WHERE p.id = ${id};`);
-            client.end()
-            resolve(res.rows[0]);
+            const res = await client.query(`SELECT id, title, description,price, count FROM products p JOIN stocks s ON p.id = s.product_id WHERE p.id = '${id}';`);
+            await client.release();
+            const product = res.rowCount > 0 ? res.rows[0] : null;
+            resolve(product);
         } catch(err) {
             console.error(err);
             reject(err);
@@ -44,7 +45,7 @@ export const getProductById = (id: string) : Promise<Product | string> => {
 
 export const addProduct = (product: {title: string, description: string, price: number, count: number}) : Promise<Product | string> => {
     return new Promise(async (resolve, reject) => {
-        client.connect()
+        const client = await pool.connect();
         try {
             await client.query('BEGIN');
             const res = await client.query(`INSERT INTO products(title, description, price) VALUES ('${product.title}','${product.description}',${product.price}) RETURNING *;`);
@@ -52,7 +53,7 @@ export const addProduct = (product: {title: string, description: string, price: 
             const newStock = await client.query(`INSERT INTO stocks(product_id, count) VALUES ('${newProduct.id}', ${product.count}) RETURNING *;`);
             newProduct.count = newStock.rows[0].count;
             await client.query("COMMIT");
-            client.end();
+            await client.release();
             resolve(newProduct);
         } catch(err) {
             client.query('ROLLBACK');

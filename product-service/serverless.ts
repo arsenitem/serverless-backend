@@ -21,7 +21,7 @@ const serverlessConfiguration: AWS = {
       NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
       PG_HOST: 'host',
       PG_PORT: '5432',
-      PG_DATABASE: 'databse',
+      PG_DATABASE: 'database',
       PG_USERNAME: 'postgres',
       PG_PASSWORD: 'password',
     },

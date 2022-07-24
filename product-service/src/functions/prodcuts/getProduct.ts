@@ -7,14 +7,15 @@ import Product from "../../models/product.model";
 const getProduct = (event) => {
   const id = event.pathParameters.productId;
   console.log(`getProduct hanlder was called with id `, id);
-  getProductById(id)
-    .then((product: Product) => {
+  return getProductById(id).then((product: Product) => {
+    if (product) {
       return formatJSONResponse({
         product,
       });
-    })
-    .catch((err) => {
-      return formatJSONError(500, err);
-    });
+    }
+    return formatJSONError(400, "Product not found");
+  }).catch((err) => {
+    return formatJSONError(500, err);
+  });
 };
 export const main = middyfy(getProduct);
