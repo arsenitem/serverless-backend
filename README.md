@@ -1,6 +1,6 @@
 # Serverless-backend
 
-This is mono repository of services built with Serverless framework
+This is mono repository of services for Online shop application. built with Serverless framework
 
 # API
 
