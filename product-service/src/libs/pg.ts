@@ -43,7 +43,7 @@ export const getProductById = (id: string) : Promise<Product> => {
     }); 
 }
 
-export const addProduct = (product: {title: string, description: string, price: number, count: number}) : Promise<Product | string> => {
+export const addProduct = (product: {title: string, description: string, price: number, count: number}) : Promise<Product> => {
     return new Promise(async (resolve, reject) => {
         const client = await pool.connect();
         try {
