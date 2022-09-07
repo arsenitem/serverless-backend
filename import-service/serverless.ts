@@ -17,6 +17,9 @@ const serverlessConfiguration: AWS = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
+      SQS_URL: {
+        Ref: 'SQSQueue'
+      }
     },
     iamRoleStatements: [
       {
@@ -25,8 +28,43 @@ const serverlessConfiguration: AWS = {
           's3:*'
         ],
         Resource: 'arn:aws:s3:::hw5-aws-bucket/*'
+      },
+      {
+        Effect: 'Allow',
+        Action: [
+          'sqs:*'
+        ],
+        Resource: {
+          'Fn::GetAtt': [
+            'SQSQueue',
+            'Arn'
+          ]
+        }
       }
     ]
+  },
+  resources: {
+    Resources: {
+      SQSQueue: {
+        Type: 'AWS::SQS::Queue',
+        Properties: {
+          QueueName: 'catalogItemsQueue'
+        }
+      },
+      GatewayResponseDefault4XX: {
+        Type: 'AWS::ApiGateway::GatewayResponse',
+        Properties: {
+          ResponseParameters: {
+            'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
+            'gatewayresponse.header.Access-Control-Allow-Headers': "'*'",
+          },
+          ResponseType: 'DEFAULT_4XX',
+          RestApiId: {
+            Ref: 'ApiGatewayRestApi'
+          }
+        }
+      }
+    }
   },
   // import the function via paths
   functions: { importProductsFile, importFileParser },
