@@ -1,27 +1,21 @@
 // import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/api-gateway';
-import { formatJSONError, formatJSONResponse } from '@libs/api-gateway';
-import { middyfy } from '@libs/lambda';
-import mock from './mock';
-import { ProductModel } from './model';
+import { formatJSONError, formatJSONResponse } from "@libs/api-gateway";
+import { middyfy } from "@libs/lambda";
+import { getProductById } from "@libs/pg";
+import Product from "../../models/product.model";
 
-const getProduct = async (event) => {
+const getProduct = (event) => {
   const id = event.pathParameters.productId;
-  try {
-    const product = await getProductAsync(id);
-    return formatJSONResponse({
-      product
-    });
-  } catch(err) {
-    return formatJSONError(err);
-  }
-};
-const getProductAsync = (id: string): Promise<ProductModel> => {
-  return new Promise((resolve, reject) => {
-    const item = mock.find((item: ProductModel) => item.id === id);
-    if (item) {
-      resolve(item);
+  console.log(`getProduct hanlder was called with id `, id);
+  return getProductById(id).then((product: Product) => {
+    if (product) {
+      return formatJSONResponse({
+        product,
+      });
     }
-    reject("No product found");
-  })
-}
+    return formatJSONError(400, "Product not found");
+  }).catch((err) => {
+    return formatJSONError(500, err);
+  });
+};
 export const main = middyfy(getProduct);

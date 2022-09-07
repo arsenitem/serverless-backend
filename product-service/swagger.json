@@ -37,52 +37,97 @@
                                 "productslist": {
                                     "type": "array",
                                     "items": {
-                                        "$ref": "#/definitions/Product"
+                                        "$ref": "#/definitions/ProductWithId"
                                     }
                                 }
-                            }      
+                            }
                         }
                     },
                     "400": {
                         "description": "Invalid status value"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "products"
+                ],
+                "summary": "Creates new product",
+                "description": "Create new product",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Product"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "product": {
+                                    "$ref": "#/definitions/ProductWithId"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    },
+                    "500": {
+                        "description": "Internal server error"
                     }
                 }
             }
         },
         "/products/{productId}": {
             "get": {
-            "tags": [
-                "products"
-            ],
-              "summary": "Returns product by id",
-              "description": "",
-              "produces": [
-                "application/json"
-              ],
-              "parameters": [
-                {
-                  "name": "productId",
-                  "in": "path",
-                  "required": true,
-                  "type": "string"
-                }
-              ],
-              "responses": {
-                "200": {
-                    "description": "successful operation",
-                    "schema": {
-                        "type": "object",
-                        "properties": {
-                            "product": { 
-                                "$ref": "#/definitions/Product"
-                            }
-                        }      
+                "tags": [
+                    "products"
+                ],
+                "summary": "Returns product by id",
+                "description": "",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "productId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
                     }
-                },
-                "400": {
-                    "description": "Not found product"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "product": {
+                                    "$ref": "#/definitions/ProductWithId"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Not found product"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
                 }
-              }
             }
         }
     },
@@ -90,13 +135,9 @@
         "Product": {
             "type": "object",
             "required": [
-                "id"
+                "tittle"
             ],
             "properties": {
-                "id": {
-                    "type": "string",
-                    "format": "uuid"
-                },
                 "count": {
                     "type": "number",
                     "format": "int64",
@@ -116,6 +157,24 @@
                     "example": 20
                 }
             }
-        } 
+        },
+        "ProductWithId": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/Product"
+                }
+            ],
+            "type": "object",
+            "required": [
+                "rootCause",
+                "id"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "format": "uuid"
+                }
+            }
+        }
     }
 }
